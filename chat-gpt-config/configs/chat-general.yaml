@@ -1,0 +1,38 @@
+# Stage 2 for the general model. Build the data first (see GENERAL.md). Conversations are kept WHOLE (pad, not pack)
+# and capped at ~1800 characters so every one fits in the 512-token context: cut-off answers teach cut-off answers.
+model:
+  vocab_size: 16384
+  context_length: 512
+  d_model: 448
+  n_layers: 8
+  n_heads: 7
+  ff_dim: 1792
+  position_encoding: rope
+data:
+  train: [data/chat-general/train]
+  validation: [data/chat-general/val.jsonl]
+  tokenizer: tokenizer-general.json
+  format: chat
+  chat_template: ptf-chat
+  chat_packing: pad
+  sequence_length: 512
+  prefetch: 0
+training:
+  init_from: checkpoints-general/checkpoint_latest.ptf
+  total_steps: 6000
+  micro_batch_size: 8
+  gradient_accumulation_steps: 4
+  learning_rate: 0.0001
+  warmup_steps: 100
+  decay: cosine
+checkpoint:
+  directory: checkpoints-chat-general
+  interval_steps: 500
+  keep_last: 3
+evaluation:
+  interval_steps: 500
+  max_batches: 25
+runtime:
+  device: auto
+  memory_limit_gb: 9
+  cache_limit_mb: 256

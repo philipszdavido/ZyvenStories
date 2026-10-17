@@ -1,0 +1,38 @@
+# Stage 2 for the bigger model: learn to follow varied story requests.
+# Build the data first:  python scripts/stories_to_chat_varied.py data/pretrain --out data/chat-story --max-stories 100000
+model:
+  vocab_size: 8192
+  context_length: 256
+  d_model: 384
+  n_layers: 8
+  n_heads: 6
+  ff_dim: 1536
+  position_encoding: rope
+data:
+  train: [data/chat-story/train]
+  validation: [data/chat-story/val.jsonl]
+  tokenizer: tokenizer.json
+  format: chat
+  chat_template: ptf-chat
+  chat_packing: pad
+  sequence_length: 256
+  prefetch: 0
+training:
+  init_from: checkpoints-medium/checkpoint_latest.ptf
+  total_steps: 4000
+  micro_batch_size: 8
+  gradient_accumulation_steps: 2
+  learning_rate: 0.00008
+  warmup_steps: 100
+  decay: cosine
+checkpoint:
+  directory: checkpoints-story-medium
+  interval_steps: 500
+  keep_last: 3
+evaluation:
+  interval_steps: 500
+  max_batches: 25
+runtime:
+  device: auto
+  memory_limit_gb: 8
+  cache_limit_mb: 256

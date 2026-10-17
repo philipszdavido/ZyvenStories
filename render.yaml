@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: ptf-gpt
+    runtime: docker
+    plan: starter            # a persistent disk needs a paid plan; pick more RAM for bigger models
+    healthCheckPath: /health
+    envVars:
+      - key: PTF_API_KEYS
+        generateValue: true  # Render generates a random key; read it in the dashboard
+      - key: MODEL_URL
+        sync: false          # you are prompted for this: https URL of your model .tar.gz
+      - key: MODEL_SHA256
+        sync: false          # optional integrity check (leave empty to skip)
+      - key: MODEL_DIR
+        value: /data/model
+      - key: ANALYTICS_PASSWORD
+        sync: false          # you are prompted for this: password for /analytics (user name "admin")
+      - key: ANALYTICS_LOG_PROMPTS
+        value: "0"           # "1" stores what visitors type and the replies; the chat page then says so
+    disk:
+      name: model-data
+      mountPath: /data
+      sizeGB: 2

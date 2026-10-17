@@ -1,0 +1,36 @@
+# Stage 1, bigger model (~17M parameters, 2.5x the starter). TinyStories only. Same tokenizer.json as before.
+# Time it on 20 steps first: expect very roughly 6,000 tok/s on an M3 Pro (about 7 hours for 20,000 steps).
+# Add --duty-cycle 0.7 to run cooler. Resume with `cli.py resume checkpoints-medium/checkpoint_latest.ptf --config ...`.
+model:
+  vocab_size: 8192
+  context_length: 256
+  d_model: 384
+  n_layers: 8
+  n_heads: 6                  # 384 / 6 = 64 per head
+  ff_dim: 1536
+  position_encoding: rope
+data:
+  train: [data/pretrain]
+  val_split_fraction: 0.01
+  tokenizer: tokenizer.json
+  sequence_length: 256
+  prefetch: 4
+training:
+  total_steps: 20000
+  micro_batch_size: 8
+  gradient_accumulation_steps: 4
+  learning_rate: 0.0005
+  warmup_steps: 500
+  decay: cosine
+  activation_checkpointing: false
+checkpoint:
+  directory: checkpoints-medium
+  interval_steps: 500
+  keep_last: 3
+evaluation:
+  interval_steps: 500
+  max_batches: 50
+runtime:
+  device: auto
+  memory_limit_gb: 8
+  cache_limit_mb: 256

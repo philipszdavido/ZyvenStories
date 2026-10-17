@@ -1,0 +1,36 @@
+# Bigger pretraining run for a GPU (~30M parameters). A starting point: measure tok/s and memory, then adjust.
+# Start the TinyStories-only pipeline first; this size is for broader text once the small run works.
+# Re-run `cli.py tokenize` if you change the data; vocab_size must match tokenizer.json.
+model:
+  vocab_size: 8192
+  context_length: 512
+  d_model: 512
+  n_layers: 8
+  n_heads: 8
+  ff_dim: 2048
+  position_encoding: rope
+data:
+  train: [data/pretrain]
+  val_split_fraction: 0.01
+  tokenizer: tokenizer.json
+  sequence_length: 512
+  prefetch: 4
+training:
+  total_steps: 40000
+  micro_batch_size: 16          # lower this if you run out of GPU memory
+  gradient_accumulation_steps: 4
+  learning_rate: 0.0004
+  warmup_steps: 1000
+  decay: cosine
+  precision: fp16               # real fp16 tensor-core matmuls; fp32 master weights; dynamic loss scaling
+  activation_checkpointing: false
+checkpoint:
+  directory: checkpoints
+  interval_steps: 1000
+  keep_last: 3
+evaluation:
+  interval_steps: 1000
+  max_batches: 50
+runtime:
+  device: auto               # CUDA if present, else the Apple GPU (mps), else the CPU
+  tf32: false

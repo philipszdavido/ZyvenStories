@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="theme-color" content="#F7F8F8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#17191C" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <title>Zyven</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <div class="app" id="app">
+    <aside class="sidebar" id="sidebar" aria-label="Chats" data-area="sidebar">
+      <div class="sidebar-head">
+        <a class="brand" href="./" aria-label="Zyven home">
+          <span class="brand-mark" data-icon="mark"></span>
+          <span class="brand-name">Zyven</span>
+        </a>
+        <button class="icon-btn" id="collapse-btn" type="button" aria-label="Close sidebar" title="Close sidebar (Ctrl+B)" data-icon="sidebar"></button>
+      </div>
+
+      <div class="sidebar-actions">
+        <button class="nav-btn nav-btn-primary" id="new-chat" type="button" title="New chat (Ctrl+Shift+O)">
+          <span data-icon="plus"></span><span>New chat</span>
+        </button>
+        <label class="search">
+          <span data-icon="search"></span>
+          <input id="search" type="search" placeholder="Search chats" aria-label="Search chats" autocomplete="off" enterkeyhint="search">
+        </label>
+      </div>
+
+      <nav class="history" id="history" aria-label="Chat history"></nav>
+
+      <div class="sidebar-foot">
+        <button class="nav-btn" id="about-btn" type="button">
+          <span data-icon="info"></span><span>About</span>
+        </button>
+        <button class="nav-btn" id="settings-btn" type="button">
+          <span data-icon="settings"></span><span>Settings</span>
+        </button>
+      </div>
+    </aside>
+    <div class="scrim" id="scrim" hidden></div>
+
+    <main class="main">
+      <header class="topbar" data-area="topbar">
+        <button class="icon-btn" id="open-sidebar" type="button" aria-label="Open sidebar" title="Open sidebar (Ctrl+B)" data-icon="sidebar"></button>
+        <h1 class="topbar-title" id="chat-title">New chat</h1>
+        <div class="topbar-end">
+          <button class="icon-btn" id="chat-menu-btn" type="button" aria-label="Chat options" aria-haspopup="menu" data-icon="more"></button>
+          <button class="icon-btn mobile-only" id="new-chat-top" type="button" aria-label="New chat" data-icon="compose"></button>
+        </div>
+      </header>
+
+      <div class="thread" id="thread" data-area="thread">
+        <div class="thread-inner">
+          <section class="welcome" id="welcome" hidden>
+            <span class="welcome-mark" data-icon="mark"></span>
+            <h2 class="welcome-title" id="welcome-title">Good to see you</h2>
+            <p class="welcome-sub">Ask for a story, an idea, or a quick explanation.</p>
+          </section>
+          <div class="messages" id="messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+        </div>
+      </div>
+
+      <div class="dock" id="dock" data-area="composer">
+        <button class="jump" id="jump" type="button" aria-label="Scroll to latest message" data-icon="arrow-down" hidden></button>
+        <div class="banner" id="banner" role="status" hidden>
+          <span data-icon="alert"></span>
+          <span class="banner-text" id="banner-text"></span>
+          <button class="link-btn" id="banner-action" type="button" hidden></button>
+        </div>
+
+        <div class="composer" id="composer">
+          <label class="sr-only" for="input">Message Zyven</label>
+          <textarea id="input" rows="1" placeholder="Message Zyven" enterkeyhint="send" autocomplete="off"></textarea>
+          <div class="composer-bar">
+            <label class="model-picker" title="Model">
+              <span class="conn-dot" id="conn-dot" data-state="pending"></span>
+              <select id="model" aria-label="Model"></select>
+              <span data-icon="chevron"></span>
+            </label>
+            <span class="composer-hint" id="composer-hint"></span>
+            <button class="send-btn" id="send" type="button" aria-label="Send message" data-icon="arrow-up" disabled></button>
+            <button class="send-btn stop-btn" id="stop" type="button" aria-label="Stop generating" data-icon="stop" hidden></button>
+          </div>
+        </div>
+
+        <div class="suggestions" id="suggestions" hidden></div>
+        <p class="footnote">Zyven is a small experimental model and can make mistakes. <span id="privacy-note" hidden></span> <button class="footnote-link" id="about-link" type="button">Built by Nnamdi Chidume</button></p>
+      </div>
+    </main>
+  </div>
+
+  <div class="menu" id="menu" role="menu" data-area="menu" hidden></div>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <dialog class="dialog dialog-about" id="about" aria-labelledby="about-title" data-area="about">
+    <div class="dialog-head about-head">
+      <span class="about-brand"><span data-icon="mark"></span>Zyven</span>
+      <button class="icon-btn" id="about-close" type="button" aria-label="Close" data-icon="close"></button>
+    </div>
+    <div class="dialog-scroll about-scroll">
+      <section class="about-hero">
+        <h2 class="about-title" id="about-title">A language model built from the ground up</h2>
+        <p class="about-lede">Zyven is a small language model trained from scratch by Nnamdi Chidume. It runs on PyTensorForge, a machine learning framework he wrote himself: the tensors, the tokenizer, the transformer, the training loop and the server answering you right now are all his code, built on NumPy.</p>
+      </section>
+
+      <section class="about-section" aria-labelledby="about-how">
+        <h3 class="about-h" id="about-how">How Zyven was made</h3>
+        <ol class="steps">
+          <li><span class="step-name">Tokenizer</span><span class="step-text">A byte-level BPE tokenizer, trained on the pretraining text with special tokens for chat turns.</span></li>
+          <li><span class="step-name">Pretraining</span><span class="step-text">A decoder-only GPT model learns language from public story and educational text.</span></li>
+          <li><span class="step-name">Chat fine-tuning</span><span class="step-text">The model is trained on conversations, learning only from the assistant's replies.</span></li>
+          <li><span class="step-name">Serving</span><span class="step-text">The exported model streams replies through PyTensorForge's OpenAI-compatible server, with a KV cache for fast generation.</span></li>
+        </ol>
+      </section>
+
+      <section class="about-section creator" aria-labelledby="about-creator">
+        <h3 class="about-h" id="about-creator">The creator</h3>
+        <div class="creator-card">
+          <div class="creator-id">
+            <span class="monogram" aria-hidden="true">NC</span>
+            <div>
+              <p class="creator-name">Nnamdi Chidume</p>
+              <p class="creator-tag">Machine-level engineer. Creator of the Ardan programming language.</p>
+            </div>
+          </div>
+          <p class="creator-bio">Nnamdi is a full-stack and iOS engineer with more than nine years of experience building web and mobile products. He likes to understand software all the way down, so he also builds the systems most developers only use: a programming language, a browser engine, a database engine, JavaScript and machine learning frameworks, and the model behind this chat. He shares what he learns on his YouTube channel, Understanding Dev, and on Medium.</p>
+          <div class="creator-links">
+            <a class="btn btn-primary" href="mailto:kurtwanger40@gmail.com"><span data-icon="mail"></span><span>Email Nnamdi</span></a>
+            <a class="btn" href="https://github.com/philipszdavido/" target="_blank" rel="noopener noreferrer"><span>GitHub</span><span data-icon="external"></span></a>
+            <a class="btn" href="https://www.linkedin.com/in/chidume-nnamdi/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><span data-icon="external"></span></a>
+            <a class="btn" href="https://www.youtube.com/channel/UCUCHv7YOQXWy2dsL-0IrlPw" target="_blank" rel="noopener noreferrer"><span>YouTube</span><span data-icon="external"></span></a>
+            <a class="btn" href="https://medium.com/@kurtwanger40" target="_blank" rel="noopener noreferrer"><span>Medium</span><span data-icon="external"></span></a>
+          </div>
+          <p class="creator-email">kurtwanger40@gmail.com</p>
+        </div>
+      </section>
+
+      <section class="about-section" aria-labelledby="about-work">
+        <h3 class="about-h" id="about-work">Selected work</h3>
+        <p class="about-note">From more than 370 public repositories on GitHub.</p>
+          <h4 class="work-group">Languages, engines and databases</h4>
+          <ul class="work-list">
+            <li><a class="work" href="https://github.com/ardan-lang/ardan-lang" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">Ardan</span><span class="work-desc">A programming language written in C++</span></span>
+              <span class="work-lang">C++</span><span data-icon="external"></span>
+            </a></li>
+            <li><a class="work" href="https://github.com/philipszdavido/ForgeEngine" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">ForgeEngine</span><span class="work-desc">A browser engine</span></span>
+              <span class="work-lang">C++20</span><span data-icon="external"></span>
+            </a></li>
+            <li><a class="work" href="https://github.com/philipszdavido/forgedb" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">ForgeDB</span><span class="work-desc">A lightweight SQL-inspired database engine</span></span>
+              <span class="work-lang">C++</span><span data-icon="external"></span>
+            </a></li>
+            <li><a class="work" href="https://github.com/philipszdavido/HTMLParser" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">HTMLParser</span><span class="work-desc">An HTML parsing engine</span></span>
+              <span class="work-lang">Swift</span><span data-icon="external"></span>
+            </a></li>
+            <li><a class="work" href="https://github.com/philipszdavido/Browser-SwiftUI" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">Browser-SwiftUI</span><span class="work-desc">A lightweight HTML rendering engine</span></span>
+              <span class="work-lang">SwiftUI</span><span data-icon="external"></span>
+            </a></li>
+          </ul>
+          <h4 class="work-group">Machine learning</h4>
+          <ul class="work-list">
+            <li><a class="work" href="https://github.com/philipszdavido/PyTensorForge" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">PyTensorForge</span><span class="work-desc">The framework Zyven was trained and served with</span></span>
+              <span class="work-lang">Python</span><span data-icon="external"></span>
+            </a></li>
+            <li><a class="work" href="https://github.com/philipszdavido/TensorForgejs" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">TensorForge.js</span><span class="work-desc">A machine learning framework for JavaScript</span></span>
+              <span class="work-lang">TypeScript</span><span data-icon="external"></span>
+            </a></li>
+            <li><a class="work" href="https://github.com/philipszdavido/AIInference" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">AIInference</span><span class="work-desc">An inference studio for TensorForge.js models</span></span>
+              <span class="work-lang">TypeScript</span><span data-icon="external"></span>
+            </a></li>
+            <li><a class="work" href="https://philipszdavido.github.io/ml-visualizer/" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">Machine Learning Classroom</span><span class="work-desc">An interactive, step-by-step visual sandbox</span></span>
+              <span class="work-lang">Angular</span><span data-icon="external"></span>
+            </a></li>
+          </ul>
+          <h4 class="work-group">Frameworks and developer tools</h4>
+          <ul class="work-list">
+            <li><a class="work" href="https://github.com/mini-ng/mini-ng" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">mini-ng</span><span class="work-desc">A JavaScript framework modelled on Angular</span></span>
+              <span class="work-lang">TypeScript</span><span data-icon="external"></span>
+            </a></li>
+            <li><a class="work" href="https://post-ly.github.io/" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">POSTly</span><span class="work-desc">A browser-based REST API tester</span></span>
+              <span class="work-lang">React</span><span data-icon="external"></span>
+            </a></li>
+          </ul>
+          <h4 class="work-group">iOS apps</h4>
+          <ul class="work-list">
+            <li><a class="work" href="https://github.com/philipszdavido/MyBuddy" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">MyBuddy</span><span class="work-desc">Real-time chat with media sharing and a personal feed</span></span>
+              <span class="work-lang">SwiftUI</span><span data-icon="external"></span>
+            </a></li>
+            <li><a class="work" href="https://github.com/philipszdavido/Rosary" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">Rosary Companion</span><span class="work-desc">Guided prayer with voice narration and custom beads</span></span>
+              <span class="work-lang">SwiftUI</span><span data-icon="external"></span>
+            </a></li>
+            <li><a class="work" href="https://github.com/philipszdavido/networt" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">NetWorth Tracker</span><span class="work-desc">Bank balances, transactions and net worth over time</span></span>
+              <span class="work-lang">SwiftUI</span><span data-icon="external"></span>
+            </a></li>
+            <li><a class="work" href="https://github.com/philipszdavido/UnderstandingDevChannel" target="_blank" rel="noopener noreferrer">
+              <span class="work-main"><span class="work-name">Understanding Dev</span><span class="work-desc">The native app for his YouTube channel</span></span>
+              <span class="work-lang">SwiftUI</span><span data-icon="external"></span>
+            </a></li>
+          </ul>
+      </section>
+
+      <section class="about-section" aria-labelledby="about-skills">
+        <h3 class="about-h" id="about-skills">What he works with</h3>
+        <dl class="skills">
+          <div><dt>Frontend</dt><dd>React, Angular, Vue, Next.js, Tailwind CSS</dd></div>
+          <div><dt>Backend</dt><dd>Node.js, NestJS, Express, GraphQL, Firebase</dd></div>
+          <div><dt>iOS</dt><dd>Swift, SwiftUI, SwiftData, Core Data</dd></div>
+          <div><dt>Systems and ML</dt><dd>C and C++, Python, NumPy, transformers, tokenizers</dd></div>
+          <div><dt>Cloud and DevOps</dt><dd>AWS, Docker, GitHub Actions, Jenkins</dd></div>
+          <div><dt>Architecture</dt><dd>Clean architecture, micro-frontends, modular monoliths</dd></div>
+          <div><dt>Data</dt><dd>PostgreSQL, MongoDB, MySQL, SQL Server, Firestore</dd></div>
+        </dl>
+      </section>
+    </div>
+  </dialog>
+
+  <dialog class="dialog" id="confirm" aria-labelledby="confirm-title" data-area="confirm">
+    <div class="dialog-body">
+      <h2 class="dialog-title" id="confirm-title">Delete chat?</h2>
+      <p class="dialog-text" id="confirm-text"></p>
+    </div>
+    <div class="dialog-actions">
+      <button class="btn" id="confirm-cancel" type="button">Cancel</button>
+      <button class="btn btn-danger" id="confirm-ok" type="button">Delete</button>
+    </div>
+  </dialog>
+
+  <dialog class="dialog dialog-wide" id="settings" aria-labelledby="settings-title" data-area="settings">
+    <div class="dialog-head">
+      <h2 class="dialog-title" id="settings-title">Settings</h2>
+      <button class="icon-btn" id="settings-close" type="button" aria-label="Close settings" data-icon="close"></button>
+    </div>
+    <div class="dialog-scroll">
+      <section class="field-group" aria-labelledby="sg-appearance">
+        <h3 class="group-title" id="sg-appearance">Appearance</h3>
+        <div class="segmented" role="radiogroup" aria-label="Theme">
+          <label><input type="radio" name="theme" value="system"><span>System</span></label>
+          <label><input type="radio" name="theme" value="light"><span>Light</span></label>
+          <label><input type="radio" name="theme" value="dark"><span>Dark</span></label>
+        </div>
+      </section>
+
+      <section class="field-group" aria-labelledby="sg-response">
+        <h3 class="group-title" id="sg-response">Responses</h3>
+        <label class="field">
+          <span class="field-label">Instructions</span>
+          <span class="field-help">Sent before every chat, for example a tone or a role for the model to play.</span>
+          <textarea id="set-system" rows="3" placeholder="Optional"></textarea>
+        </label>
+        <label class="field">
+          <span class="field-row"><span class="field-label">Creativity</span><output id="temp-out" for="set-temperature"></output></span>
+          <span class="field-help">Lower is more predictable, higher is more varied.</span>
+          <input id="set-temperature" type="range" min="0" max="2" step="0.1">
+        </label>
+        <label class="field">
+          <span class="field-row"><span class="field-label">Maximum reply length</span><output id="tokens-out" for="set-max-tokens"></output></span>
+          <span class="field-help">In tokens. Capped by the server's limit.</span>
+          <input id="set-max-tokens" type="range" min="16" max="256" step="16">
+        </label>
+      </section>
+
+      <section class="field-group" aria-labelledby="sg-connection">
+        <h3 class="group-title" id="sg-connection">Connection</h3>
+        <label class="field">
+          <span class="field-label">API key</span>
+          <span class="field-help">Only needed if the server requires one. Leave empty for public access.</span>
+          <input id="set-api-key" type="password" autocomplete="off" spellcheck="false" placeholder="Not set">
+        </label>
+        <label class="check">
+          <input id="set-remember" type="checkbox">
+          <span>Remember the key on this device</span>
+        </label>
+        <label class="field">
+          <span class="field-label">Server URL</span>
+          <span class="field-help">Leave empty to use this site.</span>
+          <input id="set-base-url" type="url" inputmode="url" spellcheck="false" placeholder="This site">
+        </label>
+      </section>
+
+      <section class="field-group" aria-labelledby="sg-data">
+        <h3 class="group-title" id="sg-data">Data</h3>
+        <div class="field-row field-row-action">
+          <span class="field-help">Chats are stored only in this browser.</span>
+          <button class="btn btn-danger-ghost" id="clear-all" type="button">Delete all chats</button>
+        </div>
+        <label class="check">
+          <input id="set-analytics" type="checkbox">
+          <span>Share anonymous usage data to help improve Zyven</span>
+        </label>
+        <p class="field-help privacy-help">Usage data covers things like which buttons are used and how fast replies are. It never includes your messages<span id="prompts-note" hidden>. Separately, this server saves conversations to improve the model</span>.</p>
+        <p class="field-help shortcuts">Shortcuts: <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>O</kbd> new chat, <kbd>Ctrl</kbd> <kbd>K</kbd> search, <kbd>Ctrl</kbd> <kbd>B</kbd> sidebar, <kbd>Esc</kbd> stop.</p>
+      </section>
+    </div>
+    <div class="dialog-actions">
+      <button class="btn" id="settings-cancel" type="button">Cancel</button>
+      <button class="btn btn-primary" id="settings-save" type="button">Save</button>
+    </div>
+  </dialog>
+</body>
+</html>

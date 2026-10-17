@@ -1,0 +1,38 @@
+# GENERAL-PURPOSE small GPT (~27M parameters): plain web/educational text + synthetic textbooks.
+# Data:   python scripts/download_datasets.py fineweb-edu-dedup --max-docs 300000 --out data/general-pretrain
+#         python scripts/download_datasets.py cosmopedia-v2     --max-docs 200000 --out data/general-pretrain
+# Tokens: ~485M. At ~4,000 tok/s (ESTIMATE for an M3 Pro, measure it) that is about 1.5 days; add --duty-cycle 0.7 to run cooler.
+# Test 20 steps first, delete checkpoints-general, then run for real:  caffeinate -i python cli.py train configs/pretrain-general.yaml --device mps
+model:
+  vocab_size: 16384            # must match tokenizer.json (train it with --vocab-size 16384)
+  context_length: 512
+  d_model: 448
+  n_layers: 8
+  n_heads: 7                   # 448 / 7 = 64 per head
+  ff_dim: 1792
+  position_encoding: rope
+data:
+  train: [data/general-pretrain]
+  val_split_fraction: 0.005
+  tokenizer: tokenizer-general.json
+  sequence_length: 512
+  prefetch: 4
+training:
+  total_steps: 15000           # 15,000 steps x 32,768 tokens = ~490M tokens
+  micro_batch_size: 8
+  gradient_accumulation_steps: 8
+  learning_rate: 0.0006
+  warmup_steps: 500
+  decay: cosine
+  activation_checkpointing: false
+checkpoint:
+  directory: checkpoints-general
+  interval_steps: 500
+  keep_last: 3
+evaluation:
+  interval_steps: 500
+  max_batches: 50
+runtime:
+  device: auto
+  memory_limit_gb: 9
+  cache_limit_mb: 256

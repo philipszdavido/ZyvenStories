@@ -1,0 +1,58 @@
+[fact] What is the capital of France?
+The capital of France is Paris.
+
+[fact] Who wrote the play Romeo and Juliet?
+The play Romeo and Juliet wrote the play Romeo and Juliet.
+
+[fact] Why is the sky blue?
+The sky blue is blue. It's a beautiful blue color, with a radiant color. The sky blue is blue, and the sky is blue. The sky blue is blue, and the sky is blue.
+
+[fact] What do plants need to grow?
+The plants need to grow well in their own soil. They need to grow well in their own soil. The plants need to grow well in their own soil, which is the soil that needs to grow well in their own soil. This can help them grow and grow well in their own soil.
+
+[explain] Explain what a computer is to a child.
+A computer is a computer that is designed to be used for various tasks. It is a computer that is designed to be used for various tasks, such as computer programs, computer programs, and even software. It is a computer that is designed to be used for various tasks, such as computer programs, computer programs, and software.
+
+In a computer, a computer is used for various tasks, such as processing data, processing data, and performing tasks. It is designed to be used for tasks, such as computer programs, computer programs, and software. The computer is designed to be used for tasks, such as processing data, processing data, and performing tasks.
+
+In a computer, a computer is used for tasks, such as processing data, processing data, and performing tasks. It
+
+[reason] If I have 3 apples and eat 1, how many are left?
+If I have 3 apples and eat 1, then I have 3 - 1 = 6 apples.
+If I eat 1, then I eat 1 - 1 = 6 apples.
+If I eat 1 apple, then I eat 1 - 1 = 6 apples.
+Therefore, I have 6 - 1 = 6 apples.
+#### 6
+The answer is: 6
+
+[reason] Tom is taller than Sam. Sam is taller than Max. Who is the tallest?
+The tallest tree in Sam is taller than Sam.
+
+[code] Write a Python function that adds two numbers.
+Here's how you can do it in Python:
+
+```python
+def add_numbers(numbers):
+    return nums.numpy()
+```
+
+[code] Write a Python loop that prints the numbers 1 to 5.
+```python
+def print_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and_numbers_and
+
+[chat] Hello! How are you today?
+Hello! How can I help you today?
+
+[chat] Give me three tips for studying.
+1. Research the history of the Earth: Look into the past, the geological features, and the geological features.
+2. Research the Earth: Look into the geological features and geological features of the Earth.
+3. Research the geological features: Look into the geological features of the Earth.
+4. Research the geological features: Look into the geological features of the Earth.
+5. Research the geological features: Look into the geological features of the Earth.
+6. Research the geological features: Look into the geological features of the Earth.
+7. Research the geological features: Look into the geological features of the Earth.
+8. Research the geological features: Look into the geological features of the Earth.
+9. Research the geological features: Look into the geological features of the Earth
+
+[story] Tell me a short story about a dog.
+The dog was a dog. It was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog. The dog was a dog, and the dog was a
