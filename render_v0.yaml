@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: ptf-gpt
+    name: zyvenstories
     runtime: docker
     plan: starter            # a persistent disk needs a paid plan; pick more RAM for bigger models
     healthCheckPath: /health
